@@ -1,0 +1,6 @@
+FROM nginx
+
+
+COPY ./app.conf /etc/nginx/nginx.conf
+
+EXPOSE 80 443

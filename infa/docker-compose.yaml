@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  app1:
+    image: 914972914859.dkr.ecr.eu-north-1.amazonaws.com/backend:latest
+    container_name: express-app1
+    ports:
+      - "8080:3001"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SENDER_EMAIL=${SENDER_EMAIL}
+      - SENDER_EMAIL_PASSWORD=${SENDER_EMAIL_PASSWORD}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    depends_on:
+      - redis
+
+  app2:
+    image: 914972914859.dkr.ecr.eu-north-1.amazonaws.com/backend:latest
+    container_name: express-app2
+    ports:
+      - "8082:3001"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SENDER_EMAIL=${SENDER_EMAIL}
+      - SENDER_EMAIL_PASSWORD=${SENDER_EMAIL_PASSWORD}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    depends_on:
+      - redis
+
+
+  app3:
+    image: 914972914859.dkr.ecr.eu-north-1.amazonaws.com/backend:latest
+    container_name: express-app3
+    ports:
+      - "8083:3001"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - JWT_SECRET=${JWT_SECRET}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SENDER_EMAIL=${SENDER_EMAIL}
+      - SENDER_EMAIL_PASSWORD=${SENDER_EMAIL_PASSWORD}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - AWS_REGION=${AWS_REGION}
+      - S3_BUCKET_NAME=${S3_BUCKET_NAME}
+    depends_on:
+      - redis
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nginx
+    container_name: nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - app1
+      - app2
+      - app3
